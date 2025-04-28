@@ -1,0 +1,2 @@
+degree,l,n_it,n_s,calc_energy,exact_energy,calc_struct_fac,exact_struct_fac,std_calc_energy,std_calc_struct_fac,path
+0,14,10,504,-14.75208333501493,-27.72728368548198,2.232142857142857,0.3437539792794752,1.3726789115659939,0.09964471724454284,data/log/t_14_0_10_504.csv
