@@ -160,22 +160,27 @@ def result(path, N_IT):
     return calc_energy,calc_struct_fac, std_calc_energy, std_calc_struct_fac
 
 
-def exact_diag(op,structure_factor):
-    E_gs, ket_gs = nk.exact.lanczos_ed(op, compute_eigenvectors=True)
-    structure_factor_gs = (ket_gs.T.conj()@structure_factor.to_linear_operator()@ket_gs).real[0,0]
-    exact_energy,exact_struct_fac = E_gs[0], structure_factor_gs
-    print("Exact ground state energy = {0:.3f}".format(E_gs[0]))
-    print("Exact Ground-state Structure Factor: {0:.3f}".format(structure_factor_gs))
-    return exact_energy,exact_struct_fac
+def exact_diag(op,structure_factor, run_exact):
+    if run_exact :
+         E_gs, ket_gs = nk.exact.lanczos_ed(op, compute_eigenvectors=True)
+         structure_factor_gs = (ket_gs.T.conj()@structure_factor.to_linear_operator()@ket_gs).real[0,0]
+         exact_energy,exact_struct_fac = E_gs[0], structure_factor_gs
+         print("Exact ground state energy = {0:.3f}".format(E_gs[0]))
+         print("Exact Ground-state Structure Factor: {0:.3f}".format(structure_factor_gs))
+         return exact_energy,exact_struct_fac
+
+    else :
+         return 0, 0
 
 
-def main(A,T,L,N_IT,N_S,LOGP):
+
+def main(A,T,L,N_IT,N_S,LOGP,TO_EXACT):
 
     op,structure_factor,path = run(A,T,L,N_IT,N_S,LOGP)
 
     calc_energy,calc_struct_fac,std_calc_energy, std_calc_struct_fac = result(path,N_IT)
 
-    exact_energy,exact_struct_fac = exact_diag(op,structure_factor)
+    exact_energy,exact_struct_fac = exact_diag(op,structure_factor, TO_EXACT)
 
     df = pd.DataFrame({
     'degree'              : [A],
@@ -196,7 +201,7 @@ def main(A,T,L,N_IT,N_S,LOGP):
 #NN_IT = [30,50,100,200,400,600,1200,2400]
 #NN_S  = [504,1008,2016,4032]
 
-NN_IT = [1200]
+NN_IT = [100,300,600,1200]
 NN_S  = [1200]
 LL    = [32]
 T     = 10
@@ -211,7 +216,7 @@ for N_IT in NN_IT:
                 trained_params_list = []
                 parameters_list     = []
                 iii                 = []
-                df = main(A,T,L,N_IT,N_S,LOGP)
+                df = main(A,T,L,N_IT,N_S,LOGP, False)
                 path_df = P + '_'+ str(L) + '_' + str(A) + '_' + str(N_IT) + '_' + str(N_S) + '.csv'
                 r_path_df = P + '_'+ str(L) + '_' + str(A) + '_' + str(N_IT) + '_' + str(N_S) + '_R' + '.csv'
                 i_path_df = P + '_'+ str(L) + '_' + str(A) + '_' + str(N_IT) + '_' + str(N_S) + '_I' + '.csv'
@@ -228,9 +233,9 @@ for N_IT in NN_IT:
                     real_v = [];img_v = []
                     for ks in kernel_list:
                         for k in ks:
-                            nr, ni = r_i(k); 
+                            nr, ni = r_i(k);
                             real_v.append(nr)
-                            img_v.append(ni) 
+                            img_v.append(ni)
                         real_row_df = pd.DataFrame([real_v])
                         img_row_df  = pd.DataFrame([img_v])
                         real_kernel_df = pd.concat([real_kernel_df,real_row_df])
@@ -238,3 +243,6 @@ for N_IT in NN_IT:
 
                 real_kernel_df.to_csv(r_path_df, index=None)
                 img_kernel_df.to_csv(i_path_df, index=None)
+
+
+
