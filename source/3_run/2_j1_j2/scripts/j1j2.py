@@ -1,56 +1,50 @@
-import jax
-import math 
-import sys
-import numpy as np
-import optax
-import netket as nk
-import netket.experimental as nkx
-import netket.nn as nknn
-import flax.linen as nn
-import jax.numpy as jnp
-from fractions import Fraction
-from scipy.stats import pearsonr
-import glob
-from pathlib import Path
-
-
-import warnings
-warnings.filterwarnings('ignore')
-
-import random
-import numpy as np
-import pandas as pd
-
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
-from matplotlib.ticker import MultipleLocator, FixedLocator
-import seaborn as sns
-import plotly.express as px
-from scipy.stats import norm
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import itertools
-
-
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from mpl_toolkits.mplot3d import Axes3D 
-from sklearn.impute import SimpleImputer
-
+# Standard library imports
 import sys
 import os
-os.environ["JAX_PLATFORM_NAME"] = "cpu"
-import netket as nk
-
-import json
-
+import warnings
+import math
 import time
+import json
+import glob
+import random
+from pathlib import Path
+from fractions import Fraction
 
-from flax import nnx
-import jax.numpy as jnp
-import jax
-import math 
-import sys
+# Scientific computing
 import numpy as np
+import scipy
+from scipy.stats import pearsonr, norm
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+
+# JAX ecosystem
+import jax
+import jax.numpy as jnp
+from flax import nnx
+import flax.linen as nn
+import optax
+
+# NetKet
+import netket as nk
+import netket.exact as nke
+import netket.nn as nknn
+import netket.experimental as nkx
+
+# Data handling
+import pandas as pd
+
+# Visualization
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator, MultipleLocator, FixedLocator
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from mpl_toolkits.mplot3d import Axes3D 
+import seaborn as sns
+import plotly.express as px
+
+# Configuration
+warnings.filterwarnings('ignore')
+os.environ["JAX_PLATFORM_NAME"] = "cpu"
 
 def n(f):
     return str(f).replace(".","_")
